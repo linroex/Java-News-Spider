@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -69,6 +70,17 @@ public class NewsSpider {
         }
     }
     
+    @Override
+    public String toString() {
+        String output = "";
+        
+        for(News news : this.newsList) {
+            output += news.toString();
+        }
+        
+        return output;
+    }
+    
     private class ChannelSpiderRunable implements Runnable {
         private final String targetUrl;
         
@@ -124,7 +136,27 @@ public class NewsSpider {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-
+        NewsSpider spider = new NewsSpider();
+        
+        spider.addEnterance("http://www.bbc.com/news/world/asia");
+        spider.addEnterance("http://www.bbc.com/news/uk");
+        spider.addEnterance("http://www.bbc.com/news/business");
+        
+        spider.setTargetSelector("a.title-link");
+        
+        spider.setTitleSelector("h1.story-body__h1");
+        spider.setAuthorSelector(".story-body__mini-info-list-and-share .mini-info-list__section");
+        spider.setDateTimeSelector(".story-body__mini-info-list-and-share .date.date--v2");
+        spider.setContentSelector(".story-body__inner");
+        
+        spider.start();
+        
+        while(true) {
+            Scanner input = new Scanner(System.in);
+            input.next();
+            
+            System.out.println(spider.toString());
+        }
     }
     
 }
