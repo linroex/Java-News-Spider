@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -17,7 +18,7 @@ import org.jsoup.nodes.Document;
  */
 public class NewsSpider {
     
-    private ArrayList<String> enterance;
+    private final ArrayList<String> enterance;
     private String targetSelector;
     
     public NewsSpider() {
@@ -45,6 +46,24 @@ public class NewsSpider {
         private final String targetUrl;
         
         public ChannelSpiderRunable(String url) {
+            this.targetUrl = url;
+        }
+        
+        @Override
+        public void run(){
+            try {
+                Document dom = Jsoup.connect(this.targetUrl).get();
+                Elements urls = dom.select(targetSelector);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    
+    private class ParseNewsRunnable implements Runnable {
+        private final String targetUrl;
+        
+        public ParseNewsRunnable(String url) {
             this.targetUrl = url;
         }
         
