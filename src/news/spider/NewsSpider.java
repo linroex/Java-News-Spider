@@ -26,16 +26,20 @@ public class NewsSpider {
     private final List<String> enterance;
     private final List<News> newsList;
     
+    private String baseUrl = "";
+    
     private String targetSelector;
     private String titleSelector;
     private String authorSelector;
     private String datetimeSelector;
     private String contentSelector;
     
-    public NewsSpider() {
+    public NewsSpider(String baseUrl) {
         this.enterance = new ArrayList();
         this.newsList = Collections.synchronizedList(new ArrayList());
         this.targetSelector = "";
+        
+        this.baseUrl = baseUrl;
     }
     
     public void setTargetSelector(String selector) {
@@ -108,7 +112,7 @@ public class NewsSpider {
         private final String targetUrl;
         
         public ParseNewsRunnable(String url) {
-            this.targetUrl = url;
+            this.targetUrl = baseUrl + url;
         }
         
         @Override
@@ -136,7 +140,9 @@ public class NewsSpider {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-        NewsSpider spider = new NewsSpider();
+        System.out.println("running");
+        
+        NewsSpider spider = new NewsSpider("http://www.bbc.com");
         
         spider.addEnterance("http://www.bbc.com/news/world/asia");
         spider.addEnterance("http://www.bbc.com/news/uk");
