@@ -7,6 +7,8 @@ package news.spider;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,11 +21,13 @@ import org.jsoup.select.Elements;
  */
 public class NewsSpider {
     
-    private final ArrayList<String> enterance;
+    private final List<String> enterance;
+    private final List<News> newsList;
     private String targetSelector;
     
     public NewsSpider() {
         this.enterance = new ArrayList();
+        this.newsList = Collections.synchronizedList(new ArrayList());
         this.targetSelector = "";
     }
     
