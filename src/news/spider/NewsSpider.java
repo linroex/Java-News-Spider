@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -74,12 +76,16 @@ public class NewsSpider {
         }
     }
     
+    public int size() {
+        return this.newsList.size();
+    }
+     
     @Override
     public String toString() {
         String output = "";
         
         for(News news : this.newsList) {
-            output += news.toString();
+            output += news.toString() + "\n";
         }
         
         return output;
@@ -157,12 +163,13 @@ public class NewsSpider {
         
         spider.start();
         
-        while(true) {
-            Scanner input = new Scanner(System.in);
-            input.next();
-            
-            System.out.println(spider.toString());
-        }
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask(){
+            @Override
+            public void run() {
+                System.out.println(spider.size());
+            }
+        }, 0, 1000);
     }
     
 }
