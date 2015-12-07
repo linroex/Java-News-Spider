@@ -6,6 +6,7 @@
 package news.spider;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,12 @@ public class NewsSpider {
     
     private final List<String> enterance;
     private final List<News> newsList;
+    
     private String targetSelector;
+    private String titleSelector;
+    private String authorSelector;
+    private String datetimeSelector;
+    private String contentSelector;
     
     public NewsSpider() {
         this.enterance = new ArrayList();
@@ -33,6 +39,22 @@ public class NewsSpider {
     
     public void setTargetSelector(String selector) {
         this.targetSelector = selector;
+    }
+    
+    public void setTitleSelector(String selector) {
+        this.titleSelector = selector;
+    }
+    
+    public void setAuthorSelector(String selector) {
+        this.authorSelector = selector;
+    }
+    
+    public void setDateTimeSelector(String selector) {
+        this.datetimeSelector = selector;
+    }
+    
+    public void setContentSelector(String selector) {
+        this.contentSelector = selector;
     }
     
     public int addEnterance(String url) {
@@ -82,7 +104,12 @@ public class NewsSpider {
             try {
                 Document dom = Jsoup.connect(this.targetUrl).get();
                 
-                // parse dom as news object
+                String title = dom.select(titleSelector).text();
+                String author = "";
+                LocalDateTime datetime;
+                String content = "";
+                
+                
                 
             } catch (IOException e) {
                 System.out.println(e.getMessage());
