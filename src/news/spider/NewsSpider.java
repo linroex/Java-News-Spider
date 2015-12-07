@@ -5,12 +5,16 @@
  */
 package news.spider;
 
+import com.google.gson.Gson;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -107,6 +111,23 @@ public class NewsSpider {
         return output;
     }
     
+    public String toJson() {
+        return new Gson().toJson(this.newsList);
+    }
+    
+    public void save(File file) throws IOException {
+        BufferedWriter writer = new BufferedWriter(
+            new OutputStreamWriter(
+                new FileOutputStream(file, true),    //append
+                "utf-8"
+            )
+        );
+        
+        writer.write(this.toJson());
+        
+        writer.close();
+    }
+    
     private class ChannelSpiderRunable implements Runnable {
         private final String targetUrl;
         
@@ -187,7 +208,12 @@ public class NewsSpider {
             public void run() {
                 if(spider.isFinish()) {
                     timer.cancel();
-                    System.out.println(spider.toString());
+                    
+                    try {
+                        spider.save(new File("report.txt"));
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
         }, 0, 1000);

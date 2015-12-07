@@ -5,6 +5,7 @@
  */
 package news.spider;
 
+import com.google.gson.Gson;
 import java.time.LocalDateTime;
 
 /**
@@ -27,5 +28,9 @@ public class News {
     @Override
     public String toString() {
         return this.title;
+    }
+    
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 }
