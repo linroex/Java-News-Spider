@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
@@ -54,6 +55,11 @@ public class NewsSpider {
             try {
                 Document dom = Jsoup.connect(this.targetUrl).get();
                 Elements urls = dom.select(targetSelector);
+                
+                for(Element url : urls) {
+                    Thread parseNewsThread = new Thread(new ParseNewsRunnable(url.attr("href")));
+                    parseNewsThread.start();
+                }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -69,6 +75,14 @@ public class NewsSpider {
         
         @Override
         public void run() {
+            try {
+                Document dom = Jsoup.connect(this.targetUrl).get();
+                
+                // parse dom as news object
+                
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
             
         }
     }
