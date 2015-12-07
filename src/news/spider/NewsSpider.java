@@ -33,6 +33,26 @@ public class NewsSpider {
         this.enterance.add(url);
         return this.enterance.size();
     }
+    
+    public void start() {
+        for(String url : this.enterance) {
+            Thread channelThread = new Thread(new ChannelSpiderRunable(url));
+            channelThread.start();
+        }
+    }
+    
+    private class ChannelSpiderRunable implements Runnable {
+        private final String targetUrl;
+        
+        public ChannelSpiderRunable(String url) {
+            this.targetUrl = url;
+        }
+        
+        @Override
+        public void run() {
+            
+        }
+    }
 
     /**
      * @param args the command line arguments
