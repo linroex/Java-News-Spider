@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 public class News {
     private String title;
     private String author;
-    private final LocalDateTime datetime;
+    private String datetime;
     private String content;
     
-    public News(String title, String author, LocalDateTime datetime, String content) {
+    public News(String title, String author, String datetime, String content) {
         this.title = title;
         this.author = author;
         this.datetime = datetime;

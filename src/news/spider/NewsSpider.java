@@ -105,11 +105,12 @@ public class NewsSpider {
                 Document dom = Jsoup.connect(this.targetUrl).get();
                 
                 String title = dom.select(titleSelector).text();
-                String author = "";
-                LocalDateTime datetime;
-                String content = "";
+                String author = dom.select(authorSelector).text();
+                String datetime = dom.select(datetimeSelector).text();
+                String content = dom.select(contentSelector).text();
                 
-                
+                News news = new News(title, author, datetime, content);
+                newsList.add(news);
                 
             } catch (IOException e) {
                 System.out.println(e.getMessage());
