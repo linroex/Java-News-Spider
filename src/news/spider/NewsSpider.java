@@ -27,6 +27,7 @@ public class NewsSpider {
     
     private final List<String> enterance;
     private final List<News> newsList;
+    private final List<Thread> threads;
     
     private String baseUrl = "";
     
@@ -38,7 +39,10 @@ public class NewsSpider {
     
     public NewsSpider(String baseUrl) {
         this.enterance = new ArrayList();
+        
         this.newsList = Collections.synchronizedList(new ArrayList());
+        this.threads = Collections.synchronizedList(new ArrayList());
+        
         this.targetSelector = "";
         
         this.baseUrl = baseUrl;
@@ -73,13 +77,25 @@ public class NewsSpider {
         for(String url : this.enterance) {
             Thread channelThread = new Thread(new ChannelSpiderRunable(url));
             channelThread.start();
+            
+            threads.add(channelThread);
         }
     }
     
     public int size() {
         return this.newsList.size();
     }
-     
+    
+    public boolean isFinish() {
+        boolean finish = false;
+        
+        for(Thread thread : this.threads) {
+            finish |= thread.isAlive();
+        }
+        
+        return !finish;
+    }
+    
     @Override
     public String toString() {
         String output = "";
@@ -107,6 +123,8 @@ public class NewsSpider {
                 for(Element url : urls) {
                     Thread parseNewsThread = new Thread(new ParseNewsRunnable(url.attr("href")));
                     parseNewsThread.start();
+                    
+                    threads.add(parseNewsThread);
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -167,7 +185,10 @@ public class NewsSpider {
         timer.scheduleAtFixedRate(new TimerTask(){
             @Override
             public void run() {
-                System.out.println(spider.size());
+                if(spider.isFinish()) {
+                    timer.cancel();
+                    System.out.println(spider.toString());
+                }
             }
         }, 0, 1000);
     }
